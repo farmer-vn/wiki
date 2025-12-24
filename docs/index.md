@@ -94,7 +94,7 @@ hide:
 ### The Team
 
 - **Leads**: Tuyen, Dat
-- **Core Members**: Binh, Son, Vy, Ty
+- **Core Members**: Binh, Thuan, Son, Vy, Ty
 
 ### Infrastructure
 
