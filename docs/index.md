@@ -7,6 +7,16 @@ hide:
 <style>
 .md-content {
   padding: 0 !important;
+  margin-top: 0 !important;
+}
+
+.md-content__inner {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.md-main__inner {
+  margin-top: 0 !important;
 }
 
 /* Hero Banner Styling - Material Design Style */
@@ -14,8 +24,9 @@ hide:
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  margin-top: calc(var(--md-toolbar-height, 3rem) * -1);
   min-height: 70vh;
-  background-image: url('figures/hero-background.png');
+  background-image: url('figures/hero-genomics.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -91,14 +102,6 @@ hide:
 .hero-buttons .button-secondary:hover {
   background: rgba(255,255,255,0.1);
 }
-.md-typeset h2 {
-  text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 3rem;
-  opacity: 0.95;
-  line-height: 1.6;
-  color: white;
-}
 
 .hero-buttons {
   display: flex;
@@ -139,11 +142,18 @@ hide:
   transform: translateY(-2px);
 }
 
-.md-typeset h2 {
+/* Content section headings */
+.content-wrapper .md-typeset h2 {
   text-align: center;
   font-size: 2.2rem;
   font-weight: 700;
   margin: 3rem 0 2rem;
+  color: var(--md-default-fg-color);
+}
+
+/* Hide edit/view buttons */
+.md-content__button {
+  display: none;
 }
 
 .content-wrapper {
@@ -155,7 +165,7 @@ hide:
 
 <div class="hero-banner">
   <div class="hero-content">
-    <h1>Farmer Wiki</h1>
+    <h1>The Farmers</h1>
     <p>Computational research leveraging high-performance computing infrastructure for genomics and bioinformatics</p>
     <div class="hero-buttons">
       <a href="guides/saga/" class="button-primary">Get Started →</a>
