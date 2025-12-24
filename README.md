@@ -1,16 +1,30 @@
-# HPC Lab Wiki
+# Farmer Wiki
 
 [![Deploy MkDocs site to Pages](https://github.com/farmer-vn/wiki/actions/workflows/pages.yml/badge.svg)](https://github.com/farmer-vn/wiki/actions/workflows/pages.yml)
 
-A comprehensive documentation site for working with HPC (High-Performance Computing) clusters, built with MkDocs Material theme.
+A comprehensive documentation hub for computational genomics research using HPC systems, built with MkDocs Material theme.
 
-🌐 **Live Site**: [https://farmer-vn.github.io/wiki](https://farmer-vn.github.io/wiki)
+🌐 **Live Sites**: 
+- [https://farmer-vn.github.io/wiki](https://farmer-vn.github.io/wiki)
+- [https://wiki.dattn.com](https://wiki.dattn.com) (custom domain)
 
-## Why MkDocs?
+## About
 
-✅ **Simple Markdown files** - All documentation is in `docs/*.md` files  
+The Farmer Wiki serves as a centralized knowledge base for team members working on computational research leveraging high-performance computing infrastructure. We focus on:
+
+- Developing deep learning models for genome language tasks
+- Sequence-to-function and gene expression prediction
+## Contents
+
+All documentation files are in the `docs/` directory:
+
+- **[docs/index.md](docs/index.md)** - Beautiful home page with hero section and feature cards
+- **[docs/guides/saga.md](docs/guides/saga.md)** - Saga HPC Cluster comprehensive guide
+- **[docs/figures/](docs/figures/)** - Images and logos (including Farmer logo)
+- **[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)** - Contribution guidelines
 ✅ **Easy editing** - Team members can view and edit files directly  
-✅ **Beautiful web interface** - Material theme with search, navigation, dark mode  
+✅ **Beautiful interface** - Professional design with search, navigation, dark/light mode  
+✅ **Icon support** - 10,000+ Material icons, Octicons, and FontAwesome icons  
 ✅ **Fast** - Static site generation with instant preview  
 ✅ **Git-friendly** - Track changes, collaborate via PRs
 
@@ -65,28 +79,16 @@ touch docs/tutorials/my-tutorial.md
 
 2. Edit the file with regular Markdown:
 
-```markdown
-# My New Guide
-
-This is my content...
-```
-
-3. Add it to the navigation in `mkdocs.yml`:
-
-```yaml
-nav:
-  - Home: index.md
-  - HPC Guides:
-    - Saga Cluster: guides/saga.md
-    - New Cluster: guides/new-cluster.md  # Add this line
 ## Project Structure
 
 ```
 wiki/
 ├── docs/                      # All Markdown documentation files
-│   ├── index.md              # Home page (lab mapper)
+│   ├── index.md              # Home page with hero section
 │   ├── guides/               # HPC guides directory
 │   │   └── saga.md           # Saga cluster guide
+│   ├── figures/              # Images and logos
+│   │   └── farmer_log.jpeg   # Farmer logo
 │   └── CONTRIBUTING.md       # Contributing guide
 ├── mkdocs.yml                # MkDocs configuration
 ├── requirements.txt          # Python dependencies
@@ -95,12 +97,10 @@ wiki/
 │       └── pages.yml         # Auto-deployment workflow
 ├── serve-mkdocs.sh           # Local server script
 └── README.md                 # This file
-``` └── workflows/
-│       └── pages.yml         # Auto-deployment workflow
-├── serve-mkdocs.sh           # Local server script
-└── README.md                 # This file
-```
-
+```entation files
+│   ├── index.md              # Home page (lab mapper)
+│   ├── guides/               # HPC guides directory
+│   │   └── saga.md           # Saga cluster guide
 ## MkDocs Features
 
 ### Material Theme Features
@@ -111,20 +111,20 @@ wiki/
 - 📝 **Edit on GitHub** - Direct links to edit pages
 - 🔄 **Last updated** - Git revision dates on each page
 - 🎨 **Syntax highlighting** - Beautiful code blocks
+- 🎯 **Icon support** - 10,000+ Material icons, Octicons, FontAwesome
 - 📑 **Tabs** - Organize content in tabs
 - 💡 **Admonitions** - Callouts, tips, warnings
+- 🎴 **Grid cards** - Beautiful card layouts
+- 🖼️ **Custom logo** - Farmer logo in header
 
 ### Example Features Usage
 
-**Admonitions:**
+**Icons:**
 ```markdown
-!!! tip "Pro Tip"
-    This is a helpful tip for users!
-
-!!! warning
-    Be careful with this command!
+:material-rocket-launch: :octicons-arrow-right-24: :fontawesome-brands-github:
 ```
 
+**Grid Cards:**
 **Code blocks with copy button:**
 ````markdown
 ```bash
@@ -141,28 +141,50 @@ ssh user@saga.sigma2.no
     Instructions for Linux
 ```
 
-## About Saga
+## Deployment
 
-Saga is a supercomputer operated by SIGMA2/NRIS, located at NTNU in Trondheim, Norway. It provides approximately 140 million CPU hours per year and features:
+### GitHub Pages (Automatic)
 
-- 364 compute nodes
-- 16,064 CPU cores
-- 32 NVIDIA GPUs (P100 and A100)
-- 6.5 PB parallel file system capacity
+The site automatically deploys to GitHub Pages when you push to the `main` branch:
 
-## Local Development
+1. Make your changes locally
+2. Commit and push:
+   ```bash
+   git add .
+   git commit -m "Update documentation"
+   git push origin main
+   ```
+3. GitHub Actions will build and deploy automatically
+4. Site will be live at both:
+   - https://farmer-vn.github.io/wiki/
+   - https://wiki.dattn.com/
 
-To build and preview the site locally:
+### Custom Domain Setup
 
-### Prerequisites
+The site is configured with a custom domain `wiki.dattn.com`:
 
-- Ruby 3.0 or higher (Ruby 3.3 recommended)
-- Bundler
+1. **DNS Configuration** (Porkbun):
+   ```
+   Type: CNAME
+   Host: wiki
+   Answer: farmer-vn.github.io
+   TTL: 600
+   ```
 
-### Quick Setup (macOS with Homebrew)
+2. **CNAME File**: Already configured in `docs/CNAME`
 
-```bash
-# Install Ruby 3.3
+3. **GitHub Settings**: Custom domain configured in repository settings with HTTPS enabled
+
+## About Saga HPC
+
+Saga is a supercomputer operated by SIGMA2/NRIS, located at NTNU in Trondheim, Norway:
+
+- **Compute Nodes**: 364 nodes
+- **CPU Cores**: 16,064 cores  
+- **GPUs**: 32 NVIDIA (P100 16GB & A100 80GB)
+- **Storage**: 6.5 PB parallel file system
+- **Capacity**: ~140 million CPU hours per year
+- **Project Account**: nn9780k
 brew install ruby@3.3
 
 # Add to your shell profile (~/.zshrc or ~/.bash_profile)
