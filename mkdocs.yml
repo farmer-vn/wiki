@@ -1,11 +1,11 @@
 site_name: HPC Lab Wiki
 site_description: Documentation and guides for working with HPC clusters
-site_author: Lab Team
-site_url: https://wiki.dattn.com/
+site_author: Dat Nguyen
+site_url: https://farmer-vn.github.io/wiki/
 
 # Repository
-repo_name: farmer-vn/farmer-vn.github.io
-repo_url: https://github.com/farmer-vn/farmer-vn.github.io
+repo_name: farmer-vn/wiki
+repo_url: https://github.com/farmer-vn/wiki
 edit_uri: edit/main/docs/
 
 # Copyright
