@@ -75,8 +75,9 @@ markdown_extensions:
 # Page tree
 nav:
   - Home: index.md
-  - HPC Guides:
-    - Saga Cluster: guides/saga.md
+
+  - HPC Setup:
+    - Saga : guides/saga.md
 
 # Extra
 extra:
