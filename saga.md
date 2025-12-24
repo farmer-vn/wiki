@@ -1,7 +1,7 @@
 
 This guide provides essential instructions for team members working on the Saga HPC cluster at SIGMA2. Follow these best practices to ensure efficient use of shared computational resources.
 
-## SSH Login and Connection Setup
+## 1. SSH Login and Connection Setup
 
 ### Initial Login
 
@@ -24,15 +24,25 @@ Host saga
     ControlMaster auto
     ControlPath ~/.ssh/%r@%h:%p
     ControlPersist 8h
+
+# or newer syntax
+
+Host saga
+    HostName saga.sigma2.no
+    User {your_username}
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPersist 8h
+
 ```
 
-This configuration maintains a master connection that subsequent SSH sessions can reuse for 8 hours without re-authentication. After this, simply connect using:
+This configuration maintains a master connection that subsequent SSH sessions can reuse for 8 hours without re-authentication. Note: You'll need to create the control masters directory first with `mkdir -p ~/.ssh/controlmasters`. After this, simply connect using:
 
 ```bash
 ssh saga
 ```
 
-## Project Directory Structure
+## 2. Project Directory Structure
 
 Our project is located at `/cluster/projects/nn9780k`. Each team member should create and maintain their own personal directory:
 
@@ -47,7 +57,7 @@ mkdir -p binh   # For Binh Le
 
 **Important**: Keep all your work, datasets, and results within your personal directory to maintain organization and avoid conflicts.
 
-## Conda Environment Setup
+## 3. Conda Environment Setup
 
 ### Installing Conda
 
@@ -96,57 +106,82 @@ conda create -n {your_env} python={python_version}
 conda activate {your_env}
 
 # Install packages
-conda install pytorch numpy pandas
+pip install numpy pandas
 
 ```
 
-## File Transfer with SFTP
+## File Transfer
 
-### Uploading Files to Saga
+### Recommended Method: SFTP
 
-Use `sftp put` command to upload files:
+SFTP is recommended for its ease of use and straightforward interface. If you've configured your SSH config file as shown above, file transfers are simple:
 
 ```bash
 # Connect to Saga via SFTP
-# Since you have configured ssh config file, you can simply run
 sftp saga
 
 # Upload a single file
-put /local/path/to/file.txt /cluster/projects/nn9780k/<your_name>/path/to/destination/
+put /local/path/to/file.txt /cluster/projects/nn9780k/<your_name>/
 
 # Upload an entire directory recursively
-put -r /local/path/to/directory /cluster/projects/nn9780k/<your_name>/path/to/destination/
-
-```
-
-### Downloading Files from Saga
-
-Use `sftp get` command to download files:
-
-```bash
-# Connect to Saga via SFTP
-sftp saga
+put -r /local/path/to/directory /cluster/projects/nn9780k/<your_name>/
 
 # Download a single file
 get /cluster/projects/nn9780k/<your_name>/results.csv /local/download/path/
 
 # Download an entire directory recursively
 get -r /cluster/projects/nn9780k/<your_name>/output_dir /local/download/path/
+
+# Exit SFTP session
+bye
 ```
 
-## Submitting Jobs to Saga
+**Why SFTP:**
+- Simple and intuitive commands
+- Works seamlessly with SSH config
+- No complex syntax to remember
+- Widely supported across all platforms
+
+### Alternative: rsync
+
+For advanced users, `rsync` offers additional features like incremental transfers:
+
+```bash
+# Upload a file to Saga
+rsync --info=progress2 -a /local/path/to/file.txt {your_username}@saga.sigma2.no:/cluster/projects/nn9780k/<your_name>/
+
+# Upload a directory to Saga (note the trailing slash)
+rsync --info=progress2 -a /local/path/to/directory/ {your_username}@saga.sigma2.no:/cluster/projects/nn9780k/<your_name>/directory/
+
+# Download from Saga to your local machine
+rsync --info=progress2 -a {your_username}@saga.sigma2.no:/cluster/projects/nn9780k/<your_name>/results/ /local/download/path/
+```
+
+**rsync advantages:**
+- Skips files that already exist and haven't changed
+- Can resume interrupted transfers
+- Faster for many small files
+
+### Transferring Between Clusters
+
+For transfers between Saga and other NRIS clusters (Betzy, Olivia), set up SSH key pairs between the clusters to avoid needing password + OTP for each transfer. See the [official SSH documentation](https://documentation.sigma2.no/getting_started/ssh.html) for details.
+
+## 4. Submitting Jobs to Saga
 
 ### Understanding Partitions
 
 **CPU Partitions**: Use for non-GPU tasks
 
-- `normal` - Standard CPU jobs
-- `bigmem` - High memory requirements (up to 4TB)
+- `normal` - Standard CPU jobs (192 GiB memory per node)
+- `bigmem` - High memory requirements:
+  - Medium memory: 384 GiB (28 nodes)
+  - Big memory: 3 TiB (8 nodes)
+  - Huge memory: 6 TiB (2 nodes)
 
 **GPU Partitions**:
 
-- `accel` - Intel CPU with 4× Tesla P100 (16GB each)
-- `a100` - AMD CPU with 4× A100 (80GB each)
+- `accel` - Intel Xeon-Gold 6126 CPU with 4× NVIDIA P100 GPUs (16GB each) and 384 GiB memory
+- `a100` - AMD EPYC 7542 CPU with 4× NVIDIA A100 GPUs (80GB each) and 1 TiB memory
 
 ### Requesting Resources
 
@@ -175,8 +210,9 @@ Create a SLURM batch script (e.g., `train_job.sh`):
 #SBATCH --gpus=1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=10-00:00:00
-#SBATCH --mail-user=your.email@outlook.com
-#SBATCH --mail-type=ALL
+# Note: Email notifications are currently DISABLED on all NRIS clusters
+# #SBATCH --mail-user=your.email@outlook.com
+# #SBATCH --mail-type=ALL
 
 set -e
 
@@ -219,7 +255,7 @@ scancel <job_id>
 - Running GPU-accelerated computations
 - Using frameworks like PyTorch, TensorFlow with CUDA
 
-## Resource Monitoring
+## 5. Resource Monitoring
 
 ### Check Disk Quota
 
@@ -277,7 +313,7 @@ projects
 
 This returns project IDs like `nn9780k` that you can use in your job submissions.
 
-## Best Practices
+## 6. Best Practices
 
 1. **Always activate your conda environment** before running jobs
 2. **Test jobs with short time limits** before submitting long runs
@@ -286,4 +322,13 @@ This returns project IDs like `nn9780k` that you can use in your job submissions
 5. **Use project area for shared data** to avoid duplication across user directories
 6. **Clean up completed jobs** - remove unnecessary output files to save space
 
-For additional help, consult the [official Saga documentation](https://documentation.sigma2.no) or contact support@sigma2.no.
+## 7. Additional Resources
+
+- [Official Saga Documentation](https://documentation.sigma2.no/hpc_machines/saga.html)
+- [Getting Started Guide](https://documentation.sigma2.no/getting_started/getting_started.html)
+- [SSH Configuration Guide](https://documentation.sigma2.no/getting_started/ssh.html)
+- [File Transfer Guide](https://documentation.sigma2.no/getting_started/file_transfer.html)
+- [Job Submission Guide](https://documentation.sigma2.no/jobs/submitting.html)
+- [Storage Quota Guide](https://documentation.sigma2.no/files_storage/quota.html)
+
+For additional help, contact support through the [NRIS support portal](https://documentation.sigma2.no/getting_help/support_line.html).
