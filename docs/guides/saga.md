@@ -111,7 +111,7 @@ pip install numpy pandas
 
 ```
 
-## File Transfer
+## 4. File Transfer
 
 ### Recommended Method: SFTP
 
@@ -167,7 +167,7 @@ rsync --info=progress2 -a {your_username}@saga.sigma2.no:/cluster/projects/nn978
 
 For transfers between Saga and other NRIS clusters (Betzy, Olivia), set up SSH key pairs between the clusters to avoid needing password + OTP for each transfer. See the [official SSH documentation](https://documentation.sigma2.no/getting_started/ssh.html) for details.
 
-## 4. Submitting Jobs to Saga
+## 5. Submitting Jobs to Saga
 
 ### Understanding Partitions
 
@@ -256,7 +256,7 @@ scancel <job_id>
 - Running GPU-accelerated computations
 - Using frameworks like PyTorch, TensorFlow with CUDA
 
-## 5. Resource Monitoring
+## 6. Resource Monitoring
 
 ### Check Disk Quota
 
@@ -314,7 +314,7 @@ projects
 
 This returns project IDs like `nn9780k` that you can use in your job submissions.
 
-## 6. Best Practices
+## 7. Best Practices
 
 1. **Always activate your conda environment** before running jobs
 2. **Test jobs with short time limits** before submitting long runs
